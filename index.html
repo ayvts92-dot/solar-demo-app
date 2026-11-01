@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>BrightSun Solar App (Demo)</title>
+<meta name="description" content="Demo app: estimate your rooftop solar size, cost and payback in Karachi. Saves your estimates on your phone and works offline.">
+<meta name="theme-color" content="#0F2742">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+
+<header class="top">
+  <img src="icon.svg" alt="" width="36" height="36">
+  <div><strong>BrightSun Solar</strong><span>Karachi · Demo app</span></div>
+  <span id="offlineChip" class="chip" hidden>Offline: everything still works</span>
+</header>
+
+<main>
+
+  <!-- 1. ESTIMATE -->
+  <section class="screen" id="estimate" aria-labelledby="h-est">
+    <h1 id="h-est">Your solar estimate</h1>
+    <p class="lead">Tell us your electricity use. We size the system and show the savings.</p>
+
+    <div class="card">
+      <div class="seg" role="group" aria-label="Enter usage as">
+        <button type="button" id="modeBill" aria-pressed="true">Monthly bill (PKR)</button>
+        <button type="button" id="modeUnits" aria-pressed="false">Units (kWh)</button>
+      </div>
+      <label for="usage" id="usageLabel">Your monthly electricity bill</label>
+      <div class="input-wrap"><span id="unitTag">PKR</span><input id="usage" type="number" inputmode="numeric" value="50000"></div>
+      <input id="usageRange" type="range" aria-label="Usage slider">
+      <p class="hint" id="hint"></p>
+      <div class="seg" role="group" aria-label="System type">
+        <button type="button" id="typeOn" aria-pressed="true">On-grid</button>
+        <button type="button" id="typeHy" aria-pressed="false">Hybrid + battery</button>
+      </div>
+      <p class="hint" id="typeHint"></p>
+    </div>
+
+    <div class="results" id="results" aria-live="polite">
+      <div class="res wide"><small>Suggested system size</small><strong id="rSize">-</strong></div>
+      <div class="res"><small>Panels needed</small><strong id="rPanels">-</strong></div>
+      <div class="res"><small>Battery backup</small><strong id="rBackup">-</strong></div>
+      <div class="res wide"><small>Estimated cost (example)</small><strong id="rCost">-</strong></div>
+      <div class="res"><small>Payback</small><strong id="rPay">-</strong></div>
+      <div class="res"><small>Saving per month</small><strong id="rSave">-</strong></div>
+    </div>
+
+    <div class="card chart" role="img" aria-label="Monthly bill before and after solar">
+      <div class="bars">
+        <div><div class="track"><div class="bar before" id="barBefore"></div></div><span>Today</span><b id="vBefore">-</b></div>
+        <div><div class="track"><div class="bar after" id="barAfter"></div></div><span>With solar</span><b id="vAfter">-</b></div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn primary" id="saveBtn" type="button">Save this estimate</button>
+      <a class="btn wa" id="waBtn" href="#" target="_blank" rel="noopener">Send on WhatsApp</a>
+    </div>
+    <p class="saved-ok" id="savedOk" role="status" hidden>Saved. Find it in the Saved tab.</p>
+    <p class="fine">Demo only. Prices, savings and the number are examples, not a real offer. Assumptions: PKR 55 per unit, 5 sun hours a day, 80% system efficiency, 585 W panels.</p>
+  </section>
+
+  <!-- 2. PACKAGES -->
+  <section class="screen" id="packages" aria-labelledby="h-pk" hidden>
+    <h1 id="h-pk">Example packages</h1>
+    <p class="lead">Three common sizes to help you picture the options.</p>
+    <article class="card pkg"><h2>5 kW</h2><p class="who">Small homes and shops</p><p class="price">PKR 800,000 – 1,000,000</p><ul><li>About 600 units per month (estimate)</li><li>Roof area: roughly 30 to 35 m²</li><li>Inverter, mounting and wiring included</li></ul></article>
+    <article class="card pkg best"><span class="badge">Common choice</span><h2>10 kW</h2><p class="who">Medium homes with AC use</p><p class="price">PKR 1,600,000 – 2,000,000</p><ul><li>About 1,200 units per month (estimate)</li><li>Roof area: roughly 60 to 70 m²</li><li>Inverter, mounting and wiring included</li></ul></article>
+    <article class="card pkg"><h2>15 kW</h2><p class="who">Large homes and bigger shops</p><p class="price">PKR 2,400,000 – 3,000,000</p><ul><li>About 1,800 units per month (estimate)</li><li>Roof area: roughly 90 to 105 m²</li><li>Inverter, mounting and wiring included</li></ul></article>
+    <p class="fine">Example prices and outputs only (demo). A real quote needs a site survey.</p>
+  </section>
+
+  <!-- 3. SAVED -->
+  <section class="screen" id="saved" aria-labelledby="h-sv" hidden>
+    <h1 id="h-sv">Saved estimates</h1>
+    <p class="lead">Kept on this phone only. They work offline.</p>
+    <div id="savedList"></div>
+    <p class="empty" id="savedEmpty">Nothing saved yet. Make an estimate and tap <b>Save this estimate</b>.</p>
+    <button class="btn danger" id="clearAll" type="button" hidden>Delete all my saved data</button>
+  </section>
+
+  <!-- 4. CONTACT -->
+  <section class="screen" id="contact" aria-labelledby="h-ct" hidden>
+    <h1 id="h-ct">Free site survey</h1>
+    <p class="lead">Leave your details and the team calls you back.</p>
+    <div class="actions two">
+      <a class="btn wa" id="waChat" href="#" target="_blank" rel="noopener">WhatsApp</a>
+      <a class="btn ghost" id="callBtn" href="#">Call</a>
+    </div>
+    <form class="card form" id="quoteForm" novalidate>
+      <label for="fName">Name</label><input id="fName" type="text" autocomplete="name">
+      <div class="err" id="eName">Please enter your name.</div>
+      <label for="fPhone">Phone</label><input id="fPhone" type="tel" autocomplete="tel" placeholder="03xx xxxxxxx">
+      <div class="err" id="ePhone">Please enter a phone number (at least 10 digits).</div>
+      <label for="fArea">Area in Karachi</label><input id="fArea" type="text" placeholder="e.g. Gulshan, DHA">
+      <div class="err" id="eArea">Please enter your area.</div>
+      <label for="fBill">Monthly bill (PKR)</label><input id="fBill" type="number" inputmode="numeric" min="0">
+      <div class="err" id="eBill">Please enter your monthly bill.</div>
+      <button class="btn primary" type="submit" id="fBtn">Request my free survey</button>
+      <div class="ok" id="fOk" role="status" hidden>Thank you! We received your request and will call you soon.</div>
+    </form>
+    <h2 class="sub">How it works</h2>
+    <ol class="steps"><li><b>Free site survey.</b> We check your roof, shading and bills.</li><li><b>System design.</b> A clear quote and layout.</li><li><b>Installation.</b> Panels, inverter and wiring, tested.</li><li><b>Net metering.</b> We help you apply. Approval is up to the utility.</li></ol>
+    <p class="fine"><a href="privacy.html">Privacy policy</a> · Demo app: business, number and prices are examples.</p>
+  </section>
+
+</main>
+
+<nav class="tabs" aria-label="Main">
+  <a href="#estimate" data-tab="estimate"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/></svg>Estimate</a>
+  <a href="#packages" data-tab="packages"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="6" rx="1"/><rect x="3" y="14" width="18" height="6" rx="1"/></svg>Packages</a>
+  <a href="#saved" data-tab="saved"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-6-4-6 4z"/></svg>Saved<i id="badge" hidden>0</i></a>
+  <a href="#contact" data-tab="contact"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg>Contact</a>
+</nav>
+
+<dialog id="confirmDlg"><p id="confirmMsg">Delete?</p><div class="actions two"><button class="btn ghost" id="confirmNo" type="button">Cancel</button><button class="btn danger" id="confirmYes" type="button">Delete</button></div></dialog>
+
+<script src="app.js"></script>
+</body>
+</html>

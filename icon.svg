@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="BrightSun Solar">
+ <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFC94A"/><stop offset="1" stop-color="#FF8A1F"/></linearGradient></defs>
+ <rect width="512" height="512" rx="112" fill="#0F2742"/>
+ <circle cx="256" cy="212" r="84" fill="url(#g)"/>
+ <g stroke="#FFB020" stroke-width="22" stroke-linecap="round"><path d="M256 76v36M256 312v24M120 212h36M356 212h36M160 116l26 26M352 116l-26 26"/></g>
+ <path d="M132 420l56-92h136l56 92z" fill="#5FB3FF"/>
+ <path d="M188 328l-22 92M256 328v92M324 328l22 92M152 374h208" stroke="#0F2742" stroke-width="8"/>
+</svg>

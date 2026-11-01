@@ -1,0 +1,23 @@
+{
+  "id": "/solar-demo-app/",
+  "name": "BrightSun Solar (Demo)",
+  "short_name": "BrightSun",
+  "description": "Estimate your rooftop solar size, cost and payback in Karachi. Saves estimates on your phone and works offline.",
+  "start_url": "./?source=app",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0F2742",
+  "theme_color": "#0F2742",
+  "lang": "en",
+  "categories": ["business", "utilities"],
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "New estimate", "short_name": "Estimate", "url": "./#estimate", "icons": [{ "src": "icon-192.png", "sizes": "192x192" }] },
+    { "name": "Saved estimates", "short_name": "Saved", "url": "./#saved", "icons": [{ "src": "icon-192.png", "sizes": "192x192" }] }
+  ]
+}
